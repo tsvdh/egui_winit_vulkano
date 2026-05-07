@@ -64,7 +64,7 @@ use vulkano::{
     sync::GpuFuture,
     DeviceSize, NonZeroDeviceSize,
 };
-
+use vulkano::command_buffer::CommandBufferExecFuture;
 use crate::utils::Allocators;
 
 const VERTICES_PER_QUAD: DeviceSize = 4;
@@ -652,7 +652,7 @@ impl Renderer {
         scale_factor: f32,
         before_future: F,
         final_image: Arc<ImageView>,
-    ) -> Box<dyn GpuFuture>
+    ) -> CommandBufferExecFuture<Box<dyn GpuFuture>>
     where
         F: GpuFuture + 'static,
     {
@@ -678,7 +678,7 @@ impl Renderer {
         &self,
         mut command_buffer_builder: AutoCommandBufferBuilder<PrimaryAutoCommandBuffer>,
         before_main_cb_future: Box<dyn GpuFuture>,
-    ) -> Box<dyn GpuFuture> {
+    ) -> CommandBufferExecFuture<Box<dyn GpuFuture>> {
         // We end render pass
         command_buffer_builder.end_render_pass(Default::default()).unwrap();
         // Then execute our whole command buffer
@@ -686,7 +686,7 @@ impl Renderer {
         let after_main_cb =
             before_main_cb_future.then_execute(self.gfx_queue.clone(), command_buffer).unwrap();
         // Return our future
-        Box::new(after_main_cb)
+        after_main_cb
     }
 
     pub fn draw_on_subpass_image(

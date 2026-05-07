@@ -8,6 +8,7 @@
 // according to those terms.
 
 use egui_demo_lib::{ColorTest, DemoWindows};
+use vulkano::sync::GpuFuture;
 use egui_winit_vulkano::{Gui, GuiConfig};
 use vulkano_util::{
     context::{VulkanoConfig, VulkanoContext},
@@ -158,7 +159,7 @@ impl ApplicationHandler for App {
                 match renderer.acquire(Some(std::time::Duration::from_millis(10)), |_| {}) {
                     Ok(future) => {
                         let after_future =
-                            gui.draw_on_image(future, renderer.swapchain_image_view());
+                            gui.draw_on_image(future, renderer.swapchain_image_view()).boxed();
                         // Present swapchain
                         renderer.present(after_future, true);
                     }

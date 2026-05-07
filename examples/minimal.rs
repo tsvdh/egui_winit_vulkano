@@ -10,6 +10,7 @@
 #![allow(clippy::eq_op)]
 
 use egui::{ScrollArea, TextEdit, TextStyle};
+use vulkano::sync::GpuFuture;
 use egui_winit_vulkano::{Gui, GuiConfig};
 use vulkano_util::{
     context::{VulkanoConfig, VulkanoContext},
@@ -122,7 +123,8 @@ impl ApplicationHandler for App {
                             .gui
                             .as_mut()
                             .unwrap()
-                            .draw_on_image(future, renderer.swapchain_image_view());
+                            .draw_on_image(future, renderer.swapchain_image_view())
+                            .boxed();
                         // Present swapchain
                         renderer.present(after_future, true);
                     }

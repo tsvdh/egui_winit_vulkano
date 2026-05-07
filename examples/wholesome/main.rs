@@ -21,6 +21,7 @@ use vulkano::{
     image::{view::ImageView, Image, ImageCreateInfo, ImageType, ImageUsage},
     memory::allocator::AllocationCreateInfo,
 };
+use vulkano::sync::GpuFuture;
 use vulkano_util::{
     context::{VulkanoConfig, VulkanoContext},
     renderer::DEFAULT_IMAGE_FORMAT,
@@ -264,8 +265,8 @@ impl ApplicationHandler for App {
                             let after_scene_draw =
                                 self.scene_render_pipeline.render(future, self.scene_image.clone());
                             // Render gui
-                            let after_future = gui
-                                .draw_on_image(after_scene_draw, renderer.swapchain_image_view());
+                            let after_future =
+                                gui.draw_on_image(after_scene_draw, renderer.swapchain_image_view()).boxed();
                             // Present swapchain
                             renderer.present(after_future, true);
                         }

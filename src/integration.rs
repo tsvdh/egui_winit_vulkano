@@ -19,6 +19,7 @@ use vulkano::{
     swapchain::Surface,
     sync::GpuFuture,
 };
+use vulkano::command_buffer::CommandBufferExecFuture;
 use winit::window::Window;
 
 #[cfg(feature = "image")]
@@ -191,7 +192,7 @@ impl Gui {
         &mut self,
         before_future: F,
         final_image: Arc<ImageView>,
-    ) -> Box<dyn GpuFuture>
+    ) -> CommandBufferExecFuture<Box<dyn GpuFuture>>
     where
         F: GpuFuture + 'static,
     {

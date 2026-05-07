@@ -28,6 +28,7 @@ use vulkano::{
         DynamicState, GraphicsPipeline, PipelineLayout, PipelineShaderStageCreateInfo,
     },
 };
+use vulkano::sync::GpuFuture;
 use vulkano_util::{
     context::{VulkanoConfig, VulkanoContext},
     window::{VulkanoWindows, WindowDescriptor},
@@ -137,7 +138,7 @@ impl ApplicationHandler for App {
                     Ok(future) => {
                         // Render gui
                         let after_future =
-                            gui.draw_on_image(future, renderer.swapchain_image_view());
+                            gui.draw_on_image(future, renderer.swapchain_image_view()).boxed();
                         // Present swapchain
                         renderer.present(after_future, true);
                     }
