@@ -1,3 +1,7 @@
+This fork is meant for my Vulkan projects, to fix any specific issues I encounter when using `egui_winit_vulkano`.
+
+---
+
 # egui_winit_vulkano
 
 [![Crates.io](https://img.shields.io/crates/v/egui_winit_vulkano.svg)](https://crates.io/crates/egui_winit_vulkano)
