@@ -652,7 +652,7 @@ impl Renderer {
         scale_factor: f32,
         before_future: F,
         final_image: Arc<ImageView>,
-    ) -> CommandBufferExecFuture<Box<dyn GpuFuture>>
+    ) -> CommandBufferExecFuture<F>
     where
         F: GpuFuture + 'static,
     {
@@ -664,7 +664,7 @@ impl Renderer {
         // Execute draw commands
         let command_buffer = builder.build().unwrap();
         command_buffer_builder.execute_commands(command_buffer).unwrap();
-        let done_future = self.finish(command_buffer_builder, Box::new(before_future));
+        let done_future = self.finish(command_buffer_builder, before_future);
 
         for &id in &textures_delta.free {
             self.unregister_image(id);
@@ -674,11 +674,14 @@ impl Renderer {
     }
 
     // Finishes the rendering pipeline
-    fn finish(
+    fn finish<F>(
         &self,
         mut command_buffer_builder: AutoCommandBufferBuilder<PrimaryAutoCommandBuffer>,
-        before_main_cb_future: Box<dyn GpuFuture>,
-    ) -> CommandBufferExecFuture<Box<dyn GpuFuture>> {
+        before_main_cb_future: F,
+    ) -> CommandBufferExecFuture<F>
+    where
+        F: GpuFuture + 'static
+    {
         // We end render pass
         command_buffer_builder.end_render_pass(Default::default()).unwrap();
         // Then execute our whole command buffer

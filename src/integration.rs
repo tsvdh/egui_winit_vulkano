@@ -192,7 +192,7 @@ impl Gui {
         &mut self,
         before_future: F,
         final_image: Arc<ImageView>,
-    ) -> CommandBufferExecFuture<Box<dyn GpuFuture>>
+    ) -> CommandBufferExecFuture<F>
     where
         F: GpuFuture + 'static,
     {
