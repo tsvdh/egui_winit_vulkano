@@ -214,6 +214,17 @@ impl Gui {
         )
     }
 
+    pub fn test<F>(
+        &mut self,
+        before_future: F,
+        final_image: Arc<ImageView>,
+    ) -> CommandBufferExecFuture<F>
+    where
+        F: GpuFuture + 'static,
+    {
+        todo!()
+    }
+
     /// Creates commands for rendering ui on subpass' image and returns the command buffer for execution on your side
     /// - Finishes Egui frame
     /// - You must execute the secondary command buffer yourself
