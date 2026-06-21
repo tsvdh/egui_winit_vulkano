@@ -1,4 +1,6 @@
+## egui_winit_vulkano Fork
 This fork is meant for my Vulkan projects, to fix any specific issues I encounter when using `egui_winit_vulkano`.
+It also used the latest `egui` version, currently `0.34`.
 
 ---
 
