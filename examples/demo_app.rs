@@ -7,6 +7,7 @@
 // notice may not be copied, modified, or distributed except
 // according to those terms.
 
+use egui::{Frame, UiBuilder};
 use egui_demo_lib::{ColorTest, DemoWindows};
 use vulkano::sync::GpuFuture;
 use egui_winit_vulkano::{Gui, GuiConfig};
@@ -142,8 +143,10 @@ impl ApplicationHandler for App {
             WindowEvent::RedrawRequested => {
                 // Set immediate UI in redraw here
                 gui.immediate_ui(|gui| {
+
                     let ctx = gui.context();
-                    demo_app.ui(&ctx);
+                    let mut ui = egui::Ui::new(ctx.clone(), "ui".into(), UiBuilder::default());
+                    demo_app.ui(&mut ui);
 
                     egui::Window::new("Colors").vscroll(true).show(&ctx, |ui| {
                         egui_test.ui(ui);
